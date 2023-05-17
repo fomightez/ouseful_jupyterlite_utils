@@ -70,15 +70,19 @@ The `requests` package doesn't work out of the can, but here's a way round it fo
 
 ### Load in file from remote URL
 
-We can easily read in a file from a remote URL using `pyodide.open_url(url)`:
+We can easily read in a file from a remote URL using `pyodide.http.open_url(url)`:
 
 ```python
-from pyodide import open_url
+import pyodide
 
 url="https://raw.githubusercontent.com/innovationOUtside/ouseful_jupyterlite_utils/main/ouseful_jupyterlite_utils/utils.py"
 
-open_url(url).read()
+file_content_string = pyodide.http.open_url(url).read()
+with open(url.rsplit("/", 1)[-1], 'w') as output_file:
+    output_file.write(file_content_string)
 ```
+
+That will use the file name with an extension as the new file name (assuming typical URL with at least one `/` before filename) to save into session. (So it's like running `!curl -OL <url>` in Jupyter.
 
 ## Installation
 
